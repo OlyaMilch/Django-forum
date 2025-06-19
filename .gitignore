@@ -1,0 +1,9 @@
+*.iml
+.idea/
+__pycache__/
+instance/
+venv/
+*.log
+media/
+.venv
+*.sqlite3
