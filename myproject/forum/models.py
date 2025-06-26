@@ -22,13 +22,17 @@ class Post(models.Model):
     text = models.TextField()
     images = models.ImageField(upload_to='images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)  # Will show the comment time
-    # likes = models.ManyToManyField(User, related_name="liked_posts", blank=True)  # Альтернатива модели лайк
+    # likes = models.ManyToManyField(User, related_name="liked_posts", blank=True)  # An alternative to a simple like
 
 
+# A more complex like model for greater possibilities
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to another model
     post = models.ForeignKey(Post, on_delete=models.CASCADE)  # on_delete=models.CASCADE - if the linked model is deleted, then this object will be deleted too
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'post')  # Ban on duplicate likes
 
 
 class Comment(models.Model):
