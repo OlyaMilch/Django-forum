@@ -1,7 +1,7 @@
 from django.contrib import admin
-from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import path, include
 
 
 '''
@@ -14,6 +14,7 @@ MEDIA_ROOT is the path in the server file system where the uploaded media files 
 # This is necessary so that Django can give away images and other files.
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('forum.urls'))  # Needed to connect routes from other applications
 ]
 
 if settings.DEBUG:
