@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
 '''
@@ -14,7 +15,11 @@ MEDIA_ROOT is the path in the server file system where the uploaded media files 
 # This is necessary so that Django can give away images and other files.
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('forum.urls'))  # Needed to connect routes from other applications
+    path('api/', include('forum.urls')),  # Needed to connect routes from other applications
+
+    # JWT-routes
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 if settings.DEBUG:

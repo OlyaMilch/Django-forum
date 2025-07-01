@@ -125,3 +125,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# JWT token for authorization
+REST_FRAMEWORK = {  # Configuration that customizes the behavior of Django REST Framework.
+    'DEFAULT_AUTHENTICATION_CLASSES': (  # A list of ways that users will "log in".
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Use JWT tokens for authentication
+    ),
+}
