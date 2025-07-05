@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Post, Like, Comment
+from .models import UserProfile, Post, Like, Comment
 
 
 '''
@@ -10,7 +10,7 @@ Internal(Meta) is a utility subclass that knows which model to serialize and whi
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = UserProfile
         fields = ['id', 'nickname', 'avatar', 'sex']
 
 class PostSerializer(serializers.ModelSerializer):  # Automatically generates a serializer based on the model

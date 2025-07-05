@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from .models import User, Post, Comment, Like
+from .models import UserProfile, Post, Comment, Like
 from .serializers import UserSerializer, PostSerializer, CommentSerializer, LikeSerializer
 from .permissions import ReadOnly, AdminAndOwner
 
@@ -13,7 +13,7 @@ Here I use data in JSON and not in HTML
 
 
 class UserView(viewsets.ModelViewSet):  # viewsets.ModelViewSet - This is a class from DRF that automatically creates a full set of actions (CRUD)
-    queryset = User.objects.all()
+    queryset = UserProfile.objects.all()
     serializer_class = UserSerializer  # Blue circles is not scare. I'm overriding an attribute that already exists in the parent class, but that's how it should be
 
 class PostView(viewsets.ModelViewSet):
@@ -30,7 +30,7 @@ class CommentView(viewsets.ModelViewSet):
     permission_classes = [ReadOnly | AdminAndOwner]  # Author or admin
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(author=self.request.user)  # Save post with author = current logged in user
 
 
 class LikeView(viewsets.ModelViewSet):

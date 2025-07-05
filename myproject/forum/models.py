@@ -3,7 +3,7 @@ from django.db import models
 
 # My models here.
 
-class User(models.Model):
+class UserProfile(models.Model):
     nickname = models.CharField(max_length=40, unique=True)  # Be sure to specify the field type in objects in Django ('models.CharField' - or other)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)  # The folder is created automatically on first boot.
     sex_choice = [
@@ -17,7 +17,7 @@ class User(models.Model):
 
 
 class Post(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)  # Comment from a specific user
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)  # Comment from a specific user
     title = models.CharField(max_length=100)
     text = models.TextField()
     images = models.ImageField(upload_to='images/', null=True, blank=True)
@@ -27,7 +27,7 @@ class Post(models.Model):
 
 # A more complex like model for greater possibilities
 class Like(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to another model
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)  # Link to another model
     post = models.ForeignKey(Post, on_delete=models.CASCADE)  # on_delete=models.CASCADE - if the linked model is deleted, then this object will be deleted too
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -37,7 +37,7 @@ class Like(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(to=Post, on_delete=models.CASCADE)  # Comment under a specific post
-    author = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    author = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE)
     text = models.TextField()
     answer = models.ForeignKey(to='self', null=True, blank=True, on_delete=models.CASCADE)  # Reply to comment
     created_at = models.DateTimeField(auto_now_add=True)
