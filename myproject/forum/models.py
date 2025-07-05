@@ -1,9 +1,12 @@
+from django.contrib.auth.models import User  # Django built-in model
 from django.db import models
+
 
 
 # My models here.
 
 class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     nickname = models.CharField(max_length=40, unique=True)  # Be sure to specify the field type in objects in Django ('models.CharField' - or other)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)  # The folder is created automatically on first boot.
     sex_choice = [
