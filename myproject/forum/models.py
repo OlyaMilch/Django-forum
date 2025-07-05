@@ -2,7 +2,6 @@ from django.contrib.auth.models import User  # Django built-in model
 from django.db import models
 
 
-
 # My models here.
 
 class UserProfile(models.Model):
