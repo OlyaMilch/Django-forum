@@ -1,7 +1,9 @@
 from rest_framework import viewsets
 from .models import UserProfile, Post, Comment, Like
-from .serializers import UserSerializer, PostSerializer, CommentSerializer, LikeSerializer
+from .serializers import UserSerializer, PostSerializer, CommentSerializer, LikeSerializer, RegisterSerializer
 from .permissions import ReadOnly, AdminAndOwner
+from django.contrib.auth.models import User
+from rest_framework import generics
 
 
 
@@ -36,3 +38,7 @@ class CommentView(viewsets.ModelViewSet):
 class LikeView(viewsets.ModelViewSet):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = RegisterSerializer

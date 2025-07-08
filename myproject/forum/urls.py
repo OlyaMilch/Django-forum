@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserView, PostView, CommentView, LikeView
+from .views import UserView, PostView, CommentView, LikeView, RegisterView
 
 
 router = DefaultRouter()  # Create a router that automatically creates URL routes
@@ -17,4 +17,5 @@ forum/urls.py — routes for the API forum only
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('register/', RegisterView.as_view(), name='register')
 ]
