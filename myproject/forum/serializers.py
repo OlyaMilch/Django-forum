@@ -18,6 +18,7 @@ class PostSerializer(serializers.ModelSerializer):  # Automatically generates a 
     class Meta:
         model = Post
         fields = '__all__'  # List of fields you want to see in JSON or list ['id', 'title', 'text', 'author']
+        read_only_fields = ['author']
 
 
 class LikeSerializer(serializers.ModelSerializer):

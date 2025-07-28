@@ -15,12 +15,12 @@ MEDIA_ROOT is the path in the server file system where the uploaded media files 
 
 # This is necessary so that Django can give away images and other files.
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),  # Access to admin panel
     path('api/', include('forum.urls')),  # Needed to connect routes from other applications
 
     # JWT-routes
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # Getting a token (login)
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  # Refresh token (if access token has expired).
 ]
 
 if settings.DEBUG:

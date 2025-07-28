@@ -24,7 +24,8 @@ class PostView(viewsets.ModelViewSet):
     permission_classes = [ReadOnly | AdminAndOwner]  # Restrict access rights to actions on objects
 
     def perform_create(self, serializer):  # Called automatically when the user sends a POST request
-        serializer.save(author=self.request.user)
+        profile = UserProfile.objects.get(user=self.request.user)
+        serializer.save(author=profile)
 
 class CommentView(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
