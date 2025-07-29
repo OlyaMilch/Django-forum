@@ -4,6 +4,7 @@ from .serializers import UserSerializer, PostSerializer, CommentSerializer, Like
 from .permissions import ReadOnly, AdminAndOwner
 from django.contrib.auth.models import User
 from rest_framework import generics
+from django.shortcuts import render
 
 
 
@@ -43,3 +44,8 @@ class LikeView(viewsets.ModelViewSet):
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
+
+# Django view (for HTML page)
+def post_list_view(request):
+    posts = Post.objects.all().order_by('-created_at')  # Newest posts on top
+    return render(request, 'forum/post_list.html', {'posts': posts})
