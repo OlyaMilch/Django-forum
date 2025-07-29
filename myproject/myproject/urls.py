@@ -17,6 +17,7 @@ MEDIA_ROOT is the path in the server file system where the uploaded media files 
 urlpatterns = [
     path('admin/', admin.site.urls),  # Access to admin panel
     path('api/', include('forum.urls')),  # Needed to connect routes from other applications
+    path('', include('forum.web_urls')),  # HTML interface
 
     # JWT-routes
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # Getting a token (login)
