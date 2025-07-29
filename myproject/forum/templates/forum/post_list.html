@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Форум</title>
+</head>
+<body>
+    <h1>Добро пожаловать на форум!</h1>
+    <ul>
+        {% for post in posts %}
+            <li>
+                <h3>{{ post.title }}</h3>
+                <p>{{ post.text }}</p>
+                <small>Автор: {{ post.author.nickname }} | Дата: {{ post.created_at }}</small>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
