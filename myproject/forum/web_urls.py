@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import post_list_view
+from .views import post_list_view, register_view, profile_view, login_view
 
 
 '''
@@ -10,4 +10,8 @@ otherwise there will be confusion in urls.py
 
 urlpatterns = [
     path('', post_list_view, name='post_list'),
+    path('register/', register_view, name='register'),
+    path('login/', login_view, name='login'),
+    path('profile/', profile_view, name='profile'),
+    path('post/<int:pk>/', post_detail_view, name='post_detail'),
 ]
