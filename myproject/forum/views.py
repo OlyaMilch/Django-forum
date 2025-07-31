@@ -64,9 +64,9 @@ def register_view(request):
 
     return render(request, 'forum/register.html')
 
-@login_required
+@login_required  # Built-in Django tool. Checks if the user is logged in (then the code will be executed)
 def profile_view(request):
-    profile = request.user.profile  # user.profile работает благодаря related_name
+    profile = request.user.profile  # Get the profile of the currently logged in user
 
     if request.method == 'POST':
         nickname = request.POST.get('nickname')
@@ -80,7 +80,7 @@ def profile_view(request):
             profile.avatar = avatar
 
         profile.save()
-        return redirect('profile')  # после сохранения — обновить страницу
+        return redirect('profile')  # After saving, refresh the page
 
     return render(request, 'forum/profile.html', {'user': request.user})
 
