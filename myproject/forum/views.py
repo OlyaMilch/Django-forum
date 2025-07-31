@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from rest_framework import generics
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 
 
@@ -109,3 +109,7 @@ def login_view(request):  # Accepts a request from the user
             return render(request, 'forum/login.html', {'error': 'Неверный пароль'})
 
     return render(request, 'forum/login.html')  # Just showing the login page
+
+def logout_view(request):
+    logout(request)  # Ends the session
+    return redirect('login')  # Redirect to login (or main page)

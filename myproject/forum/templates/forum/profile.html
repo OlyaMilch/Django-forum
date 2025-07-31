@@ -53,14 +53,14 @@
     {% else %}
         <img src="/media/avatars/default.png" alt="Аватар" class="avatar-preview">
     {% endif %}
-
+     <!-- Profile form -->
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
         <label for="nickname">Никнейм:</label>
         <input type="text" name="nickname" id="nickname" value="{{ user.profile.nickname }}">
 
-        <label for="avatar">Аватарка:</label>
+        <label for="avatar">Фото профиля:</label>
         <input type="file" name="avatar" id="avatar">
 
         <label for="sex">Пол:</label>
@@ -70,6 +70,12 @@
         </select>
 
         <button type="submit">Сохранить</button>
+    </form>
+
+    <!-- Exit form -->
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" style="background-color: #f44336; margin-top: 1rem;">Выйти</button>
     </form>
 </div>
 
