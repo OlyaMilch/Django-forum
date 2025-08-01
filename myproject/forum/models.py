@@ -38,7 +38,7 @@ class Like(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(to=Post, on_delete=models.CASCADE)  # Comment under a specific post
+    post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name='comments')  # Comment under a specific post
     author = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE)
     text = models.TextField()
     answer = models.ForeignKey(to='self', null=True, blank=True, on_delete=models.CASCADE)  # Reply to comment
