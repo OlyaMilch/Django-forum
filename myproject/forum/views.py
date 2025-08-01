@@ -4,10 +4,10 @@ from .serializers import UserSerializer, PostSerializer, CommentSerializer, Like
 from .permissions import ReadOnly, AdminAndOwner
 from django.contrib.auth.models import User
 from rest_framework import generics
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-
+from django.utils import timezone
 
 
 
@@ -113,3 +113,26 @@ def login_view(request):  # Accepts a request from the user
 def logout_view(request):
     logout(request)  # Ends the session
     return redirect('login')  # Redirect to login (or main page)
+
+@login_required  # Protection from unauthorized users
+def post_detail_view(request, pk):  # Get the desired post by its pk
+    post = get_object_or_404(Post, pk=pk)
+
+    if request.method == "POST":
+        comment_text = request.POST.get("comment_text")  # Get the comment text from the form
+        if comment_text:
+            Comment.objects.create(  # Create a new Comment object associated with this post
+                post=post,
+                author=request.user.profile,
+                text=comment_text,
+                created_at=timezone.now()
+            )
+            return redirect('post_detail', pk=pk)  # Refresh the page (redirect) to avoid re-submitting the form
+
+    # The post itself is transferred, and comments are pulled in via post.comments.all in the template.
+    context = {
+        'post': post,
+    }
+    return render(request, 'post_detail.html', context)
+
+# Editing comment
