@@ -8,6 +8,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
+from django.http import HttpResponseForbidden
+from django.views.decorators.http import require_POST
 
 
 
@@ -136,3 +138,37 @@ def post_detail_view(request, pk):  # Get the desired post by its pk
     return render(request, 'post_detail.html', context)
 
 # Editing comment
+@login_required
+def edit_comment_view(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+
+    # Only the author can edit
+    if request.user != comment.author.user:
+        return HttpResponseForbidden("У вас нет прав на редактирование этого комментария.")
+
+    if request.method == 'POST':
+        new_text = request.POST.get('text')
+        if new_text:
+            comment.text = new_text
+            comment.save()
+            return redirect('post_detail', pk=comment.post.pk)
+
+    context = {
+        'comment': comment
+    }
+    return render(request, 'forum/edit_comment.html', context)
+
+# Delete comment
+@login_required
+@require_POST
+def delete_comment_view(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+
+    # Only the author or admin can delete
+    if request.user != comment.author.user and not request.user.is_superuser:
+        return HttpResponseForbidden("У вас нет прав на удаление этого комментария.")
+
+    post_pk = comment.post.pk  # Return user back to post
+    comment.delete()
+    return redirect('post_detail', pk=post_pk)
+
