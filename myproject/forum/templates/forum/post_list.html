@@ -1,3 +1,4 @@
+<!-- Page with all posts -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -9,7 +10,9 @@
     <ul>
         {% for post in posts %}
             <li>
-                <h3>{{ post.title }}</h3>
+                <h3>
+                    <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
+                </h3>
                 <p>{{ post.text }}</p>
                 <small>Автор: {{ post.author.nickname }} | Дата: {{ post.created_at }}</small>
             </li>

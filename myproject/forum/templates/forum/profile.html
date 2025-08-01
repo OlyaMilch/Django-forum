@@ -71,6 +71,9 @@
 
         <button type="submit">Сохранить</button>
     </form>
+    <a href="{% url 'post_list' %}">
+    <button type="button">Перейти к постам</button>
+    </a>
 
     <!-- Exit form -->
     <form action="{% url 'logout' %}" method="post">

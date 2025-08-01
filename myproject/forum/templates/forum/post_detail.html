@@ -1,0 +1,90 @@
+<!-- Page one specific post -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }}</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 2rem;
+        }
+        .post, .comment {
+            border: 1px solid #ccc;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+        }
+        .post img {
+            max-width: 100%;
+            margin-top: 1rem;
+        }
+        .comment-form textarea {
+            width: 100%;
+            height: 100px;
+        }
+        .button {
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="post">
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.text }}</p>
+
+    {% if post.images %}
+        <img src="{{ post.images.url }}" alt="Изображение к посту">
+    {% endif %}
+
+    <p><strong>Автор:</strong> {{ post.author.nickname }}</p>
+    <p><strong>Дата:</strong> {{ post.created_at }}</p>
+
+    <!-- Like -->
+    <form action="{% url 'like_post' pk=post.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="button">❤️ Лайк ({{ post.likes.count }})</button>
+    </form>
+
+    <!-- Edit/Delete (Author Only) -->
+    {% if user == post.author.user or user.is_superuser %}
+        <a href="{% url 'edit_post' pk=post.pk %}"><button class="button">✏️ Редактировать</button></a>
+        <form action="{% url 'delete_post' pk=post.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="button">🗑️ Удалить</button>
+        </form>
+    {% endif %}
+</div>
+
+<hr>
+
+<!-- Comments -->
+<h2>Комментарии</h2>
+{% for comment in post.comments.all %}
+    <div class="comment">
+        <p>{{ comment.text }}</p>
+        <small>Автор: {{ comment.author.nickname }} | {{ comment.created_at }}</small><br>
+
+        {% if user == comment.author.user or user.is_superuser %}
+            <a href="{% url 'edit_comment' comment.pk %}">✏️</a>
+            <form action="{% url 'delete_comment' comment.pk %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">🗑️</button>
+            </form>
+        {% endif %}
+    </div>
+{% empty %}
+    <p>Пока нет комментариев.</p>
+{% endfor %}
+
+<!-- Comment form -->
+<h3>Оставить комментарий</h3>
+<form method="post" class="comment-form">
+    {% csrf_token %}
+    <textarea name="comment_text" placeholder="Введите ваш комментарий..."></textarea><br>
+    <button type="submit">Отправить</button>
+</form>
+
+</body>
+</html>
