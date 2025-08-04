@@ -200,3 +200,15 @@ def delete_comment_view(request, pk):
     post_pk = comment.post.pk  # Return user back to post
     comment.delete()
     return redirect('post_detail', pk=post_pk)
+
+@login_required
+def delete_post_view(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+
+    if request.user != post.author.user and not request.user.is_superuser:
+        return HttpResponseForbidden("У вас нет прав на удаление этого поста.")
+
+    if request.method == "POST":
+        post.delete()
+        return redirect('post_list')  # Will return to the page with posts
+
