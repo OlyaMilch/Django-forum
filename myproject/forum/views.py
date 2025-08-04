@@ -137,6 +137,35 @@ def post_detail_view(request, pk):  # Get the desired post by its pk (id)
     }
     return render(request, 'post_detail.html', context)  # Shows an HTML page to the user
 
+@login_required
+def edit_post_view(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+
+    #  Only the author can edit
+    if request.user.profile != post.author:
+        return HttpResponseForbidden("У вас нет прав на редактирование этого поста.")
+
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        text = request.POST.get('text')
+        image = request.FILES.get('images')
+
+        if title and text:
+            post.title = title
+            post.text = text
+            if image:
+                post.images = image
+            post.save()
+            return redirect('post_detail', pk=post.pk)
+        else:
+
+            pass
+
+    context = {
+        'post': post
+    }
+    return render(request, 'edit_post.html', context)
+
 # Editing comment
 @login_required
 def edit_comment_view(request, pk):  # pk = id primary key. Instead of pk, the comment number is substituted.
