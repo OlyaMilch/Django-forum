@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать комментарий</title>
+</head>
+<body>
+    <h1>Редактировать комментарий</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <textarea name="comment_text" rows="5" cols="60">{{ comment.text }}</textarea><br>
+        <button type="submit">Сохранить</button>
+        <a href="{% url 'post_detail' pk=comment.post.pk %}">Отмена</a>
+    </form>
+</body>
+</html>
