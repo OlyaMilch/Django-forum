@@ -117,7 +117,7 @@ def logout_view(request):
     return redirect('login')  # Redirect to login (or main page)
 
 @login_required  # Protection from unauthorized users
-def post_detail_view(request, pk):  # Get the desired post by its pk
+def post_detail_view(request, pk):  # Get the desired post by its pk (id)
     post = get_object_or_404(Post, pk=pk)
 
     if request.method == "POST":
@@ -127,7 +127,7 @@ def post_detail_view(request, pk):  # Get the desired post by its pk
                 post=post,
                 author=request.user.profile,
                 text=comment_text,
-                created_at=timezone.now()
+                created_at=timezone.now()  # Uses the server's local time (because different parts of the world have different times)
             )
             return redirect('post_detail', pk=pk)  # Refresh the page (redirect) to avoid re-submitting the form
 
@@ -135,11 +135,11 @@ def post_detail_view(request, pk):  # Get the desired post by its pk
     context = {
         'post': post,
     }
-    return render(request, 'post_detail.html', context)
+    return render(request, 'post_detail.html', context)  # Shows an HTML page to the user
 
 # Editing comment
 @login_required
-def edit_comment_view(request, pk):
+def edit_comment_view(request, pk):  # pk = id primary key. Instead of pk, the comment number is substituted.
     comment = get_object_or_404(Comment, pk=pk)
 
     # Only the author can edit
@@ -151,7 +151,7 @@ def edit_comment_view(request, pk):
         if new_text:
             comment.text = new_text
             comment.save()
-            return redirect('post_detail', pk=comment.post.pk)
+            return redirect('post_detail', pk=comment.post.pk)  # Redirects the user to another URL
 
     context = {
         'comment': comment
@@ -160,15 +160,14 @@ def edit_comment_view(request, pk):
 
 # Delete comment
 @login_required
-@require_POST
+@require_POST  # Only POST requests are allowed
 def delete_comment_view(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
 
     # Only the author or admin can delete
     if request.user != comment.author.user and not request.user.is_superuser:
-        return HttpResponseForbidden("У вас нет прав на удаление этого комментария.")
+        return HttpResponseForbidden("У вас нет прав на удаление этого комментария.")  # Prohibition method
 
     post_pk = comment.post.pk  # Return user back to post
     comment.delete()
     return redirect('post_detail', pk=post_pk)
-
