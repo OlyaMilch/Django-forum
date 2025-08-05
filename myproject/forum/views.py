@@ -58,10 +58,16 @@ def post_list_view(request):
 
 def register_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
+        username = request.POST['username']  # Unique user login (Built-in User model)
         password = request.POST['password']
         email = request.POST['email']
+        nickname = request.POST['nickname']  # Display name (My UserProfile model)
+
         user = User.objects.create_user(username=username, password=password, email=email)  #  "user" will be active upon registration
+
+        # Create a user profile with a nickname
+        UserProfile.objects.create(user=user, nickname=nickname)
+
         return redirect('login')  # Redirect to login
 
     return render(request, 'forum/register.html')

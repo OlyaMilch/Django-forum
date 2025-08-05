@@ -1,7 +1,8 @@
 <form method="post">
   {% csrf_token %}
   <input name="username" placeholder="Имя пользователя" />
-  <input name="password" type="password" placeholder="Пароль" />
+    <input name="nickname" type="text" placeholder="Никнейм" required>
   <input name="email" type="email" placeholder="Email" />
+      <input name="password" type="password" placeholder="Пароль" />
   <button type="submit">Зарегистрироваться</button>
 </form>
