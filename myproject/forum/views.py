@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 from django.http import HttpResponseForbidden
 from django.views.decorators.http import require_POST
+from django.contrib import messages
 
 
 
@@ -62,6 +63,11 @@ def register_view(request):
         password = request.POST['password']
         email = request.POST['email']
         nickname = request.POST['nickname']  # Display name (My UserProfile model)
+
+        # Check: email already registered?
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Пользователь с таким email уже существует.")
+            return redirect('register')
 
         user = User.objects.create_user(username=username, password=password, email=email)  #  "user" will be active upon registration
 

@@ -1,4 +1,11 @@
 <form method="post">
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
   {% csrf_token %}
   <input name="username" placeholder="Имя пользователя" />
     <input name="nickname" type="text" placeholder="Никнейм" required>
