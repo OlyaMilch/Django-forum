@@ -112,9 +112,11 @@ def login_view(request):  # Accepts a request from the user
 
     return render(request, 'forum/login.html')  # Just showing the login page
 
+
 def logout_view(request):
     logout(request)  # Ends the session
     return redirect('login')  # Redirect to login (or main page)
+
 
 @login_required  # Protection from unauthorized users
 def post_detail_view(request, pk):  # Get the desired post by its pk (id)
@@ -137,6 +139,8 @@ def post_detail_view(request, pk):  # Get the desired post by its pk (id)
     }
     return render(request, 'post_detail.html', context)  # Shows an HTML page to the user
 
+
+# Editing post
 @login_required
 def edit_post_view(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -166,6 +170,21 @@ def edit_post_view(request, pk):
     }
     return render(request, 'edit_post.html', context)
 
+
+# Delete post
+@login_required
+def delete_post_view(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+
+    # Author or admin can delete
+    if request.user != post.author.user and not request.user.is_superuser:
+        return HttpResponseForbidden("У вас нет прав на удаление этого поста.")
+
+    if request.method == "POST":
+        post.delete()
+        return redirect('post_list')  # Will return to the page with posts
+
+
 # Editing comment
 @login_required
 def edit_comment_view(request, pk):  # pk = id primary key. Instead of pk, the comment number is substituted.
@@ -187,6 +206,7 @@ def edit_comment_view(request, pk):  # pk = id primary key. Instead of pk, the c
     }
     return render(request, 'forum/edit_comment.html', context)
 
+
 # Delete comment
 @login_required
 @require_POST  # Only POST requests are allowed
@@ -200,15 +220,3 @@ def delete_comment_view(request, pk):
     post_pk = comment.post.pk  # Return user back to post
     comment.delete()
     return redirect('post_detail', pk=post_pk)
-
-@login_required
-def delete_post_view(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-
-    if request.user != post.author.user and not request.user.is_superuser:
-        return HttpResponseForbidden("У вас нет прав на удаление этого поста.")
-
-    if request.method == "POST":
-        post.delete()
-        return redirect('post_list')  # Will return to the page with posts
-
