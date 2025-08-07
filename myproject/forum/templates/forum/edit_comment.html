@@ -9,7 +9,7 @@
 
     <form method="post">
         {% csrf_token %}
-        <textarea name="comment_text" rows="5" cols="60">{{ comment.text }}</textarea><br>
+        <textarea name="text" rows="5" cols="60">{{ comment.text }}</textarea><br>
         <button type="submit">Сохранить</button>
         <a href="{% url 'post_detail' pk=comment.post.pk %}">Отмена</a>
     </form>

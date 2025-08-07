@@ -211,7 +211,7 @@ def edit_comment_view(request, pk):  # pk = id primary key. Instead of pk, the c
         if new_text:
             comment.text = new_text
             comment.save()
-            return redirect('forum/post_detail', pk=comment.post.pk)  # Redirects the user to another URL
+            return redirect('post_detail', pk=comment.post.pk)  # Redirects the user to another URL
 
     context = {
         'comment': comment
@@ -231,7 +231,7 @@ def delete_comment_view(request, pk):
 
     post_pk = comment.post.pk  # Return user back to post
     comment.delete()
-    return redirect('forum/post_detail', pk=post_pk)
+    return redirect('post_detail', pk=post_pk)
 
 
 @login_required
