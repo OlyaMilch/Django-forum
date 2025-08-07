@@ -54,6 +54,18 @@ class RegisterView(generics.CreateAPIView):
 
 # Django views (for all HTML pages)
 def post_list_view(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        text = request.POST.get('text')
+        if title and text:
+            Post.objects.create(
+                title=title,
+                text=text,
+                author=request.user.profile,  # если связь через профиль
+                created_at=timezone.now()
+            )
+            return redirect('post_list')
+
     posts = Post.objects.all().order_by('-created_at')  # Newest posts on top
     return render(request, 'forum/post_list.html', {'posts': posts})
 
