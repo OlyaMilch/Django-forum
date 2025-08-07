@@ -149,7 +149,7 @@ def post_detail_view(request, pk):  # Get the desired post by its pk (id)
     context = {
         'post': post,
     }
-    return render(request, 'post_detail.html', context)  # Shows an HTML page to the user
+    return render(request, 'forum/post_detail.html', context)  # Shows an HTML page to the user
 
 
 # Editing post
@@ -180,7 +180,7 @@ def edit_post_view(request, pk):
     context = {
         'post': post
     }
-    return render(request, 'edit_post.html', context)
+    return render(request, 'forum/edit_post.html', context)
 
 
 # Delete post
@@ -194,7 +194,7 @@ def delete_post_view(request, pk):
 
     if request.method == "POST":
         post.delete()
-        return redirect('post_list')  # Will return to the page with posts
+        return redirect('forum/post_list')  # Will return to the page with posts
 
 
 # Editing comment
@@ -211,7 +211,7 @@ def edit_comment_view(request, pk):  # pk = id primary key. Instead of pk, the c
         if new_text:
             comment.text = new_text
             comment.save()
-            return redirect('post_detail', pk=comment.post.pk)  # Redirects the user to another URL
+            return redirect('forum/post_detail', pk=comment.post.pk)  # Redirects the user to another URL
 
     context = {
         'comment': comment
@@ -231,4 +231,22 @@ def delete_comment_view(request, pk):
 
     post_pk = comment.post.pk  # Return user back to post
     comment.delete()
-    return redirect('post_detail', pk=post_pk)
+    return redirect('forum/post_detail', pk=post_pk)
+
+
+@login_required
+def like_post_view(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
+    # Check if there is already a like from this user
+    existing_like = Like.objects.filter(user=user_profile, post=post).first()
+
+    if existing_like:
+        # Delete like
+        existing_like.delete()
+    else:
+        # Add like
+        Like.objects.create(user=user_profile, post=post)
+
+    return redirect('post_detail', pk=post.pk)
