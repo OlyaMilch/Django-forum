@@ -56,7 +56,11 @@
         </form>
     {% endif %}
 </div>
-
+<div style="margin-bottom: 1rem;">
+    <a href="{% url 'post_list' %}">
+        <button type="button" class="button">⬅️ Ко всем постам</button>
+    </a>
+</div>
 
 <hr>
 
@@ -76,11 +80,6 @@
         {% endif %}
     </div>
 
-<div style="margin-bottom: 1rem;">
-    <a href="{% url 'post_list' %}">
-        <button type="button" class="button">⬅️ Ко всем постам</button>
-    </a>
-</div>
 {% empty %}
     <p>Пока нет комментариев.</p>
 {% endfor %}
