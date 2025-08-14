@@ -30,7 +30,7 @@ class Post(models.Model):
 # A more complex like model for greater possibilities
 class Like(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)  # Link to another model
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)  # on_delete=models.CASCADE - if the linked model is deleted, then this object will be deleted too
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')  # on_delete=models.CASCADE - if the linked model is deleted, then this object will be deleted too
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
